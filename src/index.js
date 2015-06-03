@@ -76,17 +76,20 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
       'disconnected'
   }
 
+  // TODO: call() because RPC or request() because JSON-RPC?
   call (method, params) {
-    return Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this._assertStatus('connected')
 
-      this._jsonRpc.requests(method, params).then(resolve, reject)
+      this._jsonRpc.request(method, params).then(resolve, reject)
     })
   }
 
+  // TODO: close() because net.Server or disconnect() because
+  // connect()?
   close () {
     return new Promise((resolve, reject) => {
-      this._assertStatus('connected')
+      this._assertNotStatus('disconnected')
 
       const {_socket: socket} = this
       this._socket = null
@@ -135,6 +138,14 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
         }
       })
     })
+  }
+
+  _assertNotStatus (notExpected) {
+    const {status} = this
+
+    if (status === notExpected) {
+      throw new Error(`invalid status ${status}`)
+    }
   }
 
   _assertStatus (expected) {
