@@ -13,7 +13,7 @@ import parseUrl from './parse-url'
 
 const READY_STATE_TO_STATUS = {
   [WebSocket.CONNECTING]: 'connecting',
-  [WebSocket.CONNECTED]: 'connected',
+  [WebSocket.OPEN]: 'connected',
   [WebSocket.CLOSED]: 'disconnected',
 
   // We consider that closing is already disconnected.
@@ -32,6 +32,7 @@ export class ConnectionError extends BaseError {}
 
 // ===================================================================
 
+// TODO: implements #notify()
 export default class JsonRpcWebSocketClient extends EventEmitter {
   constructor (opts) {
     super()
