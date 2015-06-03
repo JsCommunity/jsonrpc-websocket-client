@@ -1,13 +1,13 @@
-# ${pkg.name} [![Build Status](https://travis-ci.org/${pkg.shortGitHubPath}.png?branch=master)](https://travis-ci.org/${pkg.shortGitHubPath})
+# jsonrpc-websocket-client [![Build Status](https://travis-ci.org/jsonrpc-websocket-client.png?branch=master)](https://travis-ci.org/jsonrpc-websocket-client)
 
 > ${pkg.description}
 
 ## Install
 
-Installation of the [npm package](https://npmjs.org/package/${pkg.name}):
+Installation of the [npm package](https://npmjs.org/package/jsonrpc-websocket-client):
 
 ```
-> npm install --save ${pkg.name}
+> npm install --save jsonrpc-websocket-client
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ the code.
 
 You may:
 
-- report any [issue](${pkg.bugs})
+- report any [issue](https://github.com/julien-f/jsonrpc-websocket-client/issues)
   you've encountered;
 - fork and create a pull request.
 
