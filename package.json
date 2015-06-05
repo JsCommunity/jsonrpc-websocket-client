@@ -32,6 +32,7 @@
     "event-to-promise": "^0.3.3",
     "json-rpc-peer": "^0.9.0",
     "json-rpc-protocol": "^0.9.0",
+    "lodash.isarray": "^3.0.3",
     "lodash.isstring": "^3.0.1",
     "lodash.startswith": "^3.0.1",
     "make-error": "^1.0.2",
