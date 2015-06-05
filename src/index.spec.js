@@ -5,8 +5,8 @@ import expect from 'must'
 // ===================================================================
 
 import eventToPromise from 'event-to-promise'
-import {createPeer} from '@julien-f/json-rpc'
-import {JsonRpcError} from '@julien-f/json-rpc/errors'
+import Peer from 'json-rpc-peer'
+import {JsonRpcError} from 'json-rpc-protocol'
 import {Server as WebSocketServer} from 'ws'
 
 import Client, {ConnectionError} from './index'
@@ -45,7 +45,7 @@ describe('Client', () => {
 
       done()
     }).on('connection', socket => {
-      const jsonRpc = createPeer(message => {
+      const jsonRpc = new Peer(message => {
         if (message.type === 'notification') {
           return
         }

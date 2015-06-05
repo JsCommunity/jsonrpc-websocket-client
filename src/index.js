@@ -1,11 +1,11 @@
 import eventToPromise from 'event-to-promise'
 import isString from 'lodash.isstring'
+import Peer from 'json-rpc-peer'
 import startsWith from 'lodash.startswith'
 import WebSocket from 'ws'
 import {BaseError} from 'make-error'
-import {createPeer} from '@julien-f/json-rpc'
 import {EventEmitter} from 'events'
-import {MethodNotFound} from '@julien-f/json-rpc/errors'
+import {MethodNotFound} from 'json-rpc-protocol'
 
 import parseUrl from './parse-url'
 
@@ -54,7 +54,7 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
     }
     this._opts = opts
 
-    this._jsonRpc = createPeer(message => {
+    this._jsonRpc = new Peer(message => {
       // This peer is only a client and does not support requests.
       if (message.type !== 'notification') {
         throw new MethodNotFound()
