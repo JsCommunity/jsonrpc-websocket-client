@@ -1,15 +1,21 @@
 {
-  "private": true,
-  "name": "",
+  "name": "jsonrpc-websocket-client",
   "version": "0.0.0",
   "license": "ISC",
-  "description": "",
-  "keywords": [],
-  "homepage": "",
-  "bugs": "",
+  "description": "JSON-RPC 2 over WebSocket",
+  "keywords": [
+    "json",
+    "json-rpc",
+    "jsonrpc",
+    "jsonrpc2",
+    "rpc",
+    "websocket"
+  ],
+  "homepage": "https://github.com/julien-f/jsonrpc-websocket-client",
+  "bugs": "https://github.com/julien-f/jsonrpc-websocket-client/issues",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/julien-f/jsonrpc-websocket-client.git"
   },
   "author": {
     "name": "Julien Fontanet",
