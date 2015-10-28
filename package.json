@@ -49,6 +49,7 @@
     "build": "babel --optional=runtime --compact=true --source-maps --out-dir=dist/ src/",
     "dev": "babel --watch --optional=runtime --source-maps --out-dir=dist/ src/",
     "lint": "standard",
+    "posttest": "npm run lint",
     "prepublish": "npm run build",
     "test": "mocha --require source-map-support/register 'dist/**/*.spec.js'",
     "test-dev": "mocha --require source-map-support/register --watch --reporter=min 'dist/**/*.spec.js'"

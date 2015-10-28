@@ -8,9 +8,9 @@ export default function parseUrl (url) {
   // Resolve the URL against the current URL if any.
   if (typeof window !== 'undefined') {
     const base = String(window.location)
-    url = url ?
-      resolveUrl(base, url) :
-      base
+    url = url
+      ? resolveUrl(base, url)
+      : base
   } else if (!url) {
     throw new Error('cannot get current URL')
   }

@@ -71,9 +71,9 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
   get status () {
     const {_socket: socket} = this
 
-    return socket ?
-      READY_STATE_TO_STATUS[socket.readyState] :
-      'disconnected'
+    return socket
+      ? READY_STATE_TO_STATUS[socket.readyState]
+      : 'disconnected'
   }
 
   // TODO: call() because RPC or request() because JSON-RPC?
