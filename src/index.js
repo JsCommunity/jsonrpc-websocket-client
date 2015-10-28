@@ -5,7 +5,7 @@ import startsWith from 'lodash.startswith'
 import WebSocket from 'ws'
 import {BaseError} from 'make-error'
 import {EventEmitter} from 'events'
-import {MethodNotFound} from 'json-rpc-protocol'
+import {MethodNotFound} from 'json-rpc-peer'
 
 import parseUrl from './parse-url'
 

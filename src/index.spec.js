@@ -6,7 +6,7 @@ import expect from 'must'
 
 import eventToPromise from 'event-to-promise'
 import Peer from 'json-rpc-peer'
-import {JsonRpcError} from 'json-rpc-protocol'
+import {JsonRpcError} from 'json-rpc-peer'
 import {Server as WebSocketServer} from 'ws'
 
 import Client, {ConnectionError} from './index'
