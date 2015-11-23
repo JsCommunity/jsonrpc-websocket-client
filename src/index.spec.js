@@ -15,23 +15,6 @@ import Client, {ConnectionError} from './index'
 
 function noop () {}
 
-expect.prototype.rejected = function () {
-  const {throw: throws} = expect.prototype
-
-  return this.actual.then(
-    () => {
-      const ex = expect(noop)
-      ex.negative = this.negative
-      throws.apply(ex, arguments)
-    },
-    (e) => {
-      const ex = expect(() => { throw e })
-      ex.negative = this.negative
-      throws.apply(ex, arguments)
-    }
-  )
-}
-
 // ===================================================================
 
 describe('Client', () => {
@@ -95,12 +78,12 @@ describe('Client', () => {
   describe('#connect()', () => {
     it('returns a promise which rejects if connecting', () => {
       client.connect()
-      return expect(client.connect()).to.be.rejected()
+      return expect(client.connect()).to.reject()
     })
 
     it('returns a promise which rejects if connected', () => {
       return client.connect().then(() => {
-        return expect(client.connect()).to.be.rejected()
+        return expect(client.connect()).to.reject()
       })
     })
 
@@ -111,13 +94,13 @@ describe('Client', () => {
     it('returns a promise which rejects on connection error', () => {
       client = new Client('ws://localhost:-1')
 
-      return expect(client.connect()).to.be.rejected()
+      return expect(client.connect()).to.reject()
     })
   })
 
   describe('#close()', () => {
     it('returns a promise which rejects if disconnected', () => {
-      return expect(client.close()).to.be.rejected()
+      return expect(client.close()).to.reject()
     })
 
     it('returns a promise which resolve when disconnected', () => {
@@ -130,7 +113,7 @@ describe('Client', () => {
       const promise = client.connect()
 
       return client.close().then(() => {
-        return expect(promise).to.be.rejected()
+        return expect(promise).to.reject()
       })
     })
 
@@ -138,7 +121,7 @@ describe('Client', () => {
       return client.connect().then(() => {
         const promise = client.call('foo')
         return client.close().then(() => {
-          return expect(promise).to.be.rejected(ConnectionError)
+          return expect(promise).to.reject.to.an.error(ConnectionError)
         })
       })
     })
@@ -146,7 +129,7 @@ describe('Client', () => {
 
   describe('#call()', () => {
     it('returns a promise which rejects if not connected', () => {
-      return expect(client.call('foo')).to.be.rejected()
+      return expect(client.call('foo')).to.reject()
     })
 
     it('returns a promise which resolves with the result of the request', () => {
@@ -159,7 +142,7 @@ describe('Client', () => {
 
     it('returns a promise which rejects with the error of the request', () => {
       return client.connect().then(() => {
-        return expect(client.call('error', ['an error'])).to.be.rejected('an error')
+        return expect(client.call('error', ['an error'])).to.reject.to.an.error('an error')
       })
     })
   })
