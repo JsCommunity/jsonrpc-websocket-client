@@ -15,20 +15,98 @@ Installation of the [npm package](https://npmjs.org/package/jsonrpc-websocket-cl
 ```javascript
 import Client from 'jsonrpc-websocket-client'
 
-const client = new Client('ws://example.org')
+async function main () {
+  const client = new Client('ws://example.org')
 
-console.log(client.status)
-// → disconnected
+  console.log(client.status)
+  // → disconnected
 
-client.connect().then(() => {
+  await client.connect()
+
   console.log(client.status)
   // → connected
 
-  return client.call('method', [1, 2, 3]).then(result => {
-    console.log(result)
-  })
-}).then(result => {
-  client.close()
+  console.log(
+    await client.call('method', [1, 2, 3])
+  )
+
+  await client.close()
+}
+
+// Run the main function and prints any errors.
+main().catch(error => {
+  console.error(error)
+  process.exit(1)
+})
+```
+
+### Creation
+
+```js
+const client = new Client(opts)
+```
+
+`opts` is either a string (the URL of the server) or an object with
+the following properties:
+
+- `url`: URL of the JSON-RPC server
+- `protocols` (*optional*): the WebSocket sub-protocols to use
+
+### Connection management
+
+**Status**
+
+```js
+console.log(client.status)
+```
+
+Possible values:
+
+- `connected`
+- `connecting`
+- `disconnected`
+
+**Connection**
+
+```js
+await client.connect()
+```
+
+**Disconnection**
+
+```js
+await client.close()
+```
+
+This method can also be used to abort the connection while connecting.
+
+### Events
+
+**Connection**
+
+```js
+client.on('connecting', () => {
+  console.log('client is connecting...')
+})
+
+client.on('connected', () => {
+  console.log('client is now connected')
+})
+```
+
+**Disconnection**
+
+```js
+client.on('disconnected', () => {
+  console.log('client is now disconnected')
+})
+```
+
+**Notification**
+
+```js
+client.on('notification', notification => {
+  console.log('notification received', notification)
 })
 ```
 

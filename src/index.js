@@ -7,28 +7,20 @@ import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
 import { MethodNotFound } from 'json-rpc-peer'
 
+import createBackoff from './backoff'
 import parseUrl from './parse-url'
 
 // ===================================================================
 
-const READY_STATE_TO_STATUS = {
-  [WebSocket.CONNECTING]: 'connecting',
-  [WebSocket.OPEN]: 'connected',
-  [WebSocket.CLOSED]: 'disconnected',
-
-  // We consider that closing is already disconnected.
-  [WebSocket.CLOSING]: 'disconnected'
-}
-
-function extractProperty (object, property) {
-  const value = object[property]
-  delete object[property]
-  return value
-}
-
-// ===================================================================
-
+// This error is used to fail pending requests when the connection is
+// closed.
 export class ConnectionError extends BaseError {}
+
+export class AbortedConnection extends ConnectionError {}
+
+const CONNECTED = 'connected'
+const CONNECTING = 'connecting'
+const DISCONNECTED = 'disconnected'
 
 // ===================================================================
 
@@ -37,15 +29,19 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
   constructor (opts) {
     super()
 
-    if (!opts || isString(opts)) {
-      opts = {
-        url: opts
-      }
+    let url, protocols
+    if (!opts) {
+      opts = {}
+    } else if (isString(opts)) {
+      url = opts
+      opts = {}
+    } else {
+      ({ url, protocols = '', ...opts } = opts)
     }
 
-    this._url = parseUrl(extractProperty(opts, 'url'))
+    this._url = parseUrl(url)
 
-    this._protocols = extractProperty(opts, 'protocols') || ''
+    this._protocols = protocols
 
     if (!startsWith(this._url, 'wss')) {
       // `rejectUnauthorized` cannot be used if the connection is not
@@ -65,21 +61,19 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
       this._socket.send(message)
     })
 
+    this._connection = null
     this._socket = null
+    this._status = null
   }
 
   get status () {
-    const {_socket: socket} = this
-
-    return socket
-      ? READY_STATE_TO_STATUS[socket.readyState]
-      : 'disconnected'
+    return this._status
   }
 
   // TODO: call() because RPC or request() because JSON-RPC?
   call (method, params) {
     return new Promise((resolve, reject) => {
-      this._assertStatus('connected')
+      this._assertStatus(CONNECTED)
 
       this._jsonRpc.request(method, params).then(resolve, reject)
     })
@@ -89,7 +83,7 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
   // connect()?
   close () {
     return new Promise((resolve, reject) => {
-      this._assertNotStatus('disconnected')
+      this._assertNotStatus(DISCONNECTED)
 
       const {_socket: socket} = this
       this._socket = null
@@ -99,52 +93,58 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
     })
   }
 
-  connect () {
-    return new Promise((resolve, reject) => {
-      this._assertStatus('disconnected')
+  async connect () {
+    this._assertStatus(DISCONNECTED)
 
-      const socket = new WebSocket(this._url, this._protocols, this._opts)
-      this._socket = socket
+    // TODO: Abort next scheduled attempt if any.
 
-      let hasConnected = false
-      socket.addEventListener('open', () => {
-        hasConnected = true
+    const socket = new WebSocket(
+      this._url,
+      this._protocols,
+      this._opts
+    )
 
-        resolve()
-        this.emit('connected')
-      })
+    this._setStatus(CONNECTING)
 
-      socket.addEventListener('error', () => {
-        this._socket = null
+    try {
+      await eventToPromise.multi(socket, [ 'open' ], [ 'close', 'error' ])
+    } catch (args) {
+      const { event } = args
+      const [ error ] = args
 
-        reject()
-      })
+      this._setStatus(DISCONNECTED)
 
-      const {_jsonRpc: jsonRpc} = this
+      if (event === 'close') {
+        throw new ConnectionError('connection aborted')
+      }
 
-      socket.addEventListener('message', message => {
-        jsonRpc.write(message.data)
-      })
+      throw new ConnectionError(error.message)
+    }
 
-      socket.addEventListener('close', () => {
-        this._socket = null
+    const jsonRpc = this._jsonRpc
 
-        jsonRpc.failPendingRequests(new ConnectionError())
-
-        if (hasConnected) {
-          this.emit('disconnected')
-        } else {
-          reject(new Error('connection aborted'))
-        }
-      })
+    socket.on('message', ({ data }) => {
+      jsonRpc.write(data)
     })
+
+    socket.addEventListener('close', () => {
+      this._socket = null
+
+      jsonRpc.failPendingRequests(new ConnectionError('connection has been closed'))
+
+      // Synchronous, better to do it at the very end.
+      this._setStatus(DISCONNECTED)
+    })
+
+    this._socket = socket
+    this._setStatus(CONNECTED)
   }
 
   _assertNotStatus (notExpected) {
     const {status} = this
 
     if (status === notExpected) {
-      throw new Error(`invalid status ${status}`)
+      throw new ConnectionError(`invalid status ${status}`)
     }
   }
 
@@ -152,7 +152,13 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
     const {status} = this
 
     if (status !== expected) {
-      throw new Error(`invalid status ${status}, expected ${expected}`)
+      throw new ConnectionError(`invalid status ${status}, expected ${expected}`)
     }
+  }
+
+  _setStatus (status) {
+    this._status = status
+
+    this.emit(status)
   }
 }
