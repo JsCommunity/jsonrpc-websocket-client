@@ -7,7 +7,6 @@ import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
 import { MethodNotFound } from 'json-rpc-peer'
 
-import createBackoff from './backoff'
 import parseUrl from './parse-url'
 
 // ===================================================================
