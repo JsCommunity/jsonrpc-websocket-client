@@ -11,6 +11,10 @@ import parseUrl from './parse-url'
 
 // ===================================================================
 
+const noop = () => {}
+
+// -------------------------------------------------------------------
+
 // This error is used to fail pending requests when the connection is
 // closed.
 export class ConnectionError extends BaseError {}
@@ -57,7 +61,8 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
 
       this.emit('notification', message)
     }).on('data', message => {
-      this._socket.send(message)
+      // TODO: better handling of send errors.
+      this._socket.send(message, noop)
     })
 
     this._connection = null
