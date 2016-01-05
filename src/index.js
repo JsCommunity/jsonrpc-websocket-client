@@ -144,6 +144,14 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
     this._setStatus(CONNECTED)
   }
 
+  notify (method, params) {
+    return new Promise(resolve => {
+      this._assertStatus(CONNECTED)
+
+      resolve(this._jsonRpc.notify(method, params))
+    })
+  }
+
   _assertNotStatus (notExpected) {
     const {status} = this
 
