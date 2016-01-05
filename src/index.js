@@ -71,24 +71,24 @@ export default class JsonRpcWebSocketClient extends EventEmitter {
 
   // TODO: call() because RPC or request() because JSON-RPC?
   call (method, params) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this._assertStatus(CONNECTED)
 
-      this._jsonRpc.request(method, params).then(resolve, reject)
+      resolve(this._jsonRpc.request(method, params))
     })
   }
 
   // TODO: close() because net.Server or disconnect() because
   // connect()?
   close () {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this._assertNotStatus(DISCONNECTED)
 
       const {_socket: socket} = this
       this._socket = null
 
       socket.close()
-      eventToPromise(socket, 'close').then(resolve, reject)
+      resolve(eventToPromise(socket, 'close'))
     })
   }
 

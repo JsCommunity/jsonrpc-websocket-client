@@ -1,6 +1,10 @@
+const symbolIterator = Symbol.iterator
+
+// -------------------------------------------------------------------
+
 const makeIterator = next => {
   const iterator = { next }
-  iterator[Symbol.iterator] = () => iterator
+  iterator[symbolIterator] = () => iterator
 
   return iterator
 }
@@ -27,7 +31,7 @@ export function fibonacci () {
 
 // Usage: iterable::map(fn) → iterable
 export function map (fn) {
-  const iterator = this[Symbol.iterator]()
+  const iterator = this[symbolIterator]()
   return makeIterator(() => {
     const item = iterator.next()
     if (item.done) {
@@ -43,7 +47,7 @@ export function map (fn) {
 
 // Usage: iterable::take(n) → iterable
 export function take (n) {
-  const iterator = this[Symbol.iterator]()
+  const iterator = this[symbolIterator]()
   return makeIterator(() => {
     let item
     if (
