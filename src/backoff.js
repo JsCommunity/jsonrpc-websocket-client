@@ -2,6 +2,8 @@ const symbolIterator = Symbol.iterator
 
 // -------------------------------------------------------------------
 
+const DONE = { done: true }
+
 const makeIterator = next => {
   const iterator = { next }
   iterator[symbolIterator] = () => iterator
@@ -35,7 +37,7 @@ export function map (fn) {
   return makeIterator(() => {
     const item = iterator.next()
     if (item.done) {
-      return { done: true }
+      return DONE
     }
 
     return {
@@ -47,6 +49,14 @@ export function map (fn) {
 
 // Usage: iterable::take(n) → iterable
 export function take (n) {
+  if (n < 1) {
+    return makeIterator(() => DONE)
+  }
+
+  if (n === Infinity) {
+    return this
+  }
+
   const iterator = this[symbolIterator]()
   return makeIterator(() => {
     let item
@@ -54,7 +64,7 @@ export function take (n) {
       !n-- ||
       (item = iterator.next()).done
     ) {
-      return { done: true }
+      return DONE
     }
 
     return {

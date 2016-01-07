@@ -19,12 +19,12 @@ async function main () {
   const client = new Client('ws://example.org')
 
   console.log(client.status)
-  // → disconnected
+  // → closed
 
-  await client.connect()
+  await client.open()
 
   console.log(client.status)
-  // → connected
+  // → open
 
   console.log(
     await client.call('method', [1, 2, 3])
@@ -62,14 +62,14 @@ console.log(client.status)
 
 Possible values:
 
-- `connected`
+- `open`
 - `connecting`
-- `disconnected`
+- `closed`
 
 **Connection**
 
 ```js
-await client.connect()
+await client.open()
 ```
 
 **Disconnection**
@@ -85,20 +85,16 @@ This method can also be used to abort the connection while connecting.
 **Connection**
 
 ```js
-client.on('connecting', () => {
-  console.log('client is connecting...')
-})
-
-client.on('connected', () => {
-  console.log('client is now connected')
+client.on('open', () => {
+  console.log('client is now open')
 })
 ```
 
 **Disconnection**
 
 ```js
-client.on('disconnected', () => {
-  console.log('client is now disconnected')
+client.on('closed', () => {
+  console.log('client is now closed')
 })
 ```
 
@@ -108,6 +104,26 @@ client.on('disconnected', () => {
 client.on('notification', notification => {
   console.log('notification received', notification)
 })
+```
+
+## Recipes
+
+### Always stay connected
+
+> Reconnect on disconnection:
+
+```js
+client.on('closed', () => {
+  client.open()
+})
+```
+
+> Use back off to keep retrying to connect:
+
+```js
+import { createBackoff } from 'jsonrpc-websocket-client'
+
+client.open(createBackoff())
 ```
 
 ## Development
