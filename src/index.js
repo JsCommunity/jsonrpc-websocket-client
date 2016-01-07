@@ -8,6 +8,7 @@ import WebSocketClient, {
   AbortedConnection,
   CLOSED,
   CONNECTING,
+  MESSAGE,
   OPEN
 } from './websocket-client'
 
@@ -56,6 +57,10 @@ export default class JsonRpcWebSocketClient extends WebSocketClient {
       peer.failPendingRequests(
         new ConnectionError('connection has been closed')
       )
+    })
+
+    this.on(MESSAGE, message => {
+      peer.write(message)
     })
   }
 

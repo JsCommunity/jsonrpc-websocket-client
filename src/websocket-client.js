@@ -24,6 +24,7 @@ export class AbortedConnection extends ConnectionError {
 
 export const CLOSED = 'closed'
 export const CONNECTING = 'connecting'
+export const MESSAGE = 'message'
 export const OPEN = 'open'
 
 // -------------------------------------------------------------------
@@ -165,7 +166,7 @@ export default class WebSocketClient extends EventEmitter {
           })
 
           socket.addEventListener('message', ({ data }) => {
-            this.emit('message', data)
+            this.emit(MESSAGE, data)
           })
 
           this._status = OPEN
