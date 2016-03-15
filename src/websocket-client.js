@@ -6,7 +6,7 @@ import { EventEmitter } from 'events'
 
 // ===================================================================
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // ===================================================================
 
@@ -59,7 +59,7 @@ export default class WebSocketClient extends EventEmitter {
   }
 
   close () {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this._status !== CLOSED) {
         const socket = this._socket
         resolve(eventToPromise(socket, 'close'))
@@ -86,7 +86,7 @@ export default class WebSocketClient extends EventEmitter {
         throw error_
       }
 
-      return this._open().catch(error => {
+      return this._open().catch((error) => {
         let current
 
         if (
@@ -161,7 +161,7 @@ export default class WebSocketClient extends EventEmitter {
         () => {
           socket.addEventListener('close', this._onClose)
 
-          socket.addEventListener('error', error => {
+          socket.addEventListener('error', (error) => {
             this.emit('error', error)
           })
 
@@ -172,7 +172,7 @@ export default class WebSocketClient extends EventEmitter {
           this._status = OPEN
           this.emit(OPEN)
         },
-        args => {
+        (args) => {
           this._onClose()
 
           if (args.event === 'close') {
