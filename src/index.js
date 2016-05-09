@@ -1,6 +1,5 @@
 import isString from 'lodash.isstring'
-import Peer from 'json-rpc-peer'
-import { MethodNotFound } from 'json-rpc-peer'
+import Peer, { MethodNotFound } from 'json-rpc-peer'
 
 import parseUrl from './parse-url'
 import WebSocketClient, {
