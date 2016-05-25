@@ -20,6 +20,16 @@ expect.prototype.iterable = function () {
   ), 'be an iterable')
 }
 
+const toArray = iterable => {
+  const iterator = iterable[Symbol.iterator]()
+  const array = []
+  let current
+  while (!(current = iterator.next()).done) {
+    array.push(current.value)
+  }
+  return array
+}
+
 // ===================================================================
 
 describe.only('fibonacci()', () => {
@@ -28,7 +38,7 @@ describe.only('fibonacci()', () => {
   })
 
   it('generates the Fibonacci sequence', () => {
-    expect([ ...fibonacci()::take(10) ])
+    expect(toArray(fibonacci()::take(10)))
       .to.eql([ 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 ])
   })
 })
