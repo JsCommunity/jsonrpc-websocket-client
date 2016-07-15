@@ -48,7 +48,7 @@
     "ghooks": "^1.2.1",
     "mocha": "^2.4.5",
     "must": "^0.13.1",
-    "nyc": "^6.1.1",
+    "nyc": "^7.0.0",
     "source-map-support": "^0.4.0",
     "standard": "^7.0.1",
     "trace": "^2.3.0"
