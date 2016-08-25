@@ -4,7 +4,7 @@ import {resolve as resolveUrl} from 'url'
 
 const PROTOCOL_RE = /^(?:(?:http|ws)(s)?:\/\/)?(.+)$/
 
-export default (url) => {
+export default url => {
   // Resolve the URL against the current URL if any.
   if (typeof window !== 'undefined') {
     const base = String(window.location)

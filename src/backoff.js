@@ -4,7 +4,7 @@ const symbolIterator = Symbol.iterator
 
 const DONE = { done: true }
 
-const makeIterator = (next) => {
+const makeIterator = next => {
   const iterator = { next }
   iterator[symbolIterator] = () => iterator
 
@@ -77,5 +77,5 @@ export function take (n) {
 // ===================================================================
 
 export default (tries = 10) => fibonacci()
-  ::map((x) => Math.round((x + Math.random() - 0.5) * 1e3))
+  ::map(x => Math.round((x + Math.random() - 0.5) * 1e3))
   ::take(tries)

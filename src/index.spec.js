@@ -18,7 +18,7 @@ function noop () {}
 
 describe('Client', () => {
   let serverPort
-  before((done) => {
+  before(done => {
     new WebSocketServer({
       host: 'localhost',
       port: 0
@@ -26,8 +26,8 @@ describe('Client', () => {
       serverPort = this.address().port
 
       done()
-    }).on('connection', (socket) => {
-      const jsonRpc = new Peer((message) => {
+    }).on('connection', socket => {
+      const jsonRpc = new Peer(message => {
         if (message.type === 'notification') {
           return
         }
@@ -41,12 +41,12 @@ describe('Client', () => {
         }
       })
 
-      jsonRpc.on('data', (data) => {
+      jsonRpc.on('data', data => {
         if (socket.readyState === socket.OPEN) {
           socket.send(data)
         }
       })
-      socket.on('message', (message) => {
+      socket.on('message', message => {
         jsonRpc.write(message)
       })
     })
@@ -134,7 +134,7 @@ describe('Client', () => {
     it('returns a promise which resolves with the result of the request', () => {
       return client.connect().then(() => {
         return client.call('identity', [42])
-      }).then((result) => {
+      }).then(result => {
         expect(result).to.equal(42)
       })
     })
