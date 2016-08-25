@@ -1,4 +1,4 @@
-import isString from 'lodash.isstring'
+import isString from 'lodash/isString'
 import Peer, { MethodNotFound } from 'json-rpc-peer'
 
 import parseUrl from './parse-url'

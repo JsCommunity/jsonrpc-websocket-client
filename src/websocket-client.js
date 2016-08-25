@@ -1,5 +1,5 @@
 import eventToPromise from 'event-to-promise'
-import startsWith from 'lodash.startswith'
+import startsWith from 'lodash/startsWith'
 import WebSocket from 'ws'
 import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
