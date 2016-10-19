@@ -11,7 +11,7 @@ Installation of the [npm package](https://npmjs.org/package/jsonrpc-websocket-cl
 ```
 
 This library requires promises support, for Node versions prior to 0.12 [see
-this page](https://github.com/julien-f/js-promise-toolbox#usage) to
+this page](https://github.com/JsCommunity/promise-toolbox#usage) to
 enable them.
 
 ## Usage
@@ -159,7 +159,7 @@ the code.
 
 You may:
 
-- report any [issue](https://github.com/julien-f/jsonrpc-websocket-client/issues)
+- report any [issue](https://github.com/JsCommunity/jsonrpc-websocket-client/issues)
   you've encountered;
 - fork and create a pull request.
 
