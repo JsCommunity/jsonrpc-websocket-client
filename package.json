@@ -1,6 +1,6 @@
 {
   "name": "jsonrpc-websocket-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "ISC",
   "description": "JSON-RPC 2 over WebSocket",
   "keywords": [
