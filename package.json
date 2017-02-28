@@ -49,7 +49,7 @@
     "mocha": "^3.0.0",
     "must": "^0.13.1",
     "rimraf": "^2.5.4",
-    "standard": "^8.5.0"
+    "standard": "^9.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production babel --source-maps --out-dir=dist/ src/",
