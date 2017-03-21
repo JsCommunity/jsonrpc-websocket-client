@@ -35,7 +35,7 @@
     "json-rpc-peer": "^0.13.1",
     "lodash": "^4.15.0",
     "make-error": "^1.1.1",
-    "ws": "^1.0.1"
+    "ws": "^2.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
