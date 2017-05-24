@@ -1,5 +1,6 @@
 import eventToPromise from 'event-to-promise'
 import WebSocket from 'ws'
+import { attempt } from 'promise-toolbox'
 import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
 import { startsWith } from 'lodash'
@@ -59,12 +60,22 @@ export default class WebSocketClient extends EventEmitter {
   }
 
   close () {
-    return new Promise(resolve => {
-      if (this._status !== CLOSED) {
-        const socket = this._socket
-        resolve(eventToPromise(socket, 'close'))
-        socket.close()
+    return attempt(() => {
+      const status = this._status
+      if (status === CLOSED) {
+        return
       }
+
+      const socket = this._socket
+      if (status === CONNECTING) {
+        socket.abort = true
+        socket.close()
+        return
+      }
+
+      const promise = eventToPromise(socket, 'close')
+      socket.close()
+      return promise
     })
   }
 
@@ -143,7 +154,7 @@ export default class WebSocketClient extends EventEmitter {
   }
 
   _open () {
-    return Promise.resolve().then(() => {
+    return attempt(() => {
       this._assertStatus(CLOSED)
       this._status = CONNECTING
 
@@ -175,7 +186,7 @@ export default class WebSocketClient extends EventEmitter {
         args => {
           this._onClose()
 
-          if (args.event === 'close') {
+          if (socket.abort) {
             throw new AbortedConnection()
           }
 

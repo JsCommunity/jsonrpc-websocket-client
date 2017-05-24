@@ -1,6 +1,4 @@
-/* eslint-env mocha */
-
-import expect from 'must'
+/* eslint-env jest */
 
 import createBackoff, {
   fibonacci,
@@ -9,16 +7,12 @@ import createBackoff, {
 
 // ===================================================================
 
-expect.prototype.iterable = function () {
-  let _ = this.actual
-
-  this.assert((
-    _ &&
-    typeof (_ = _[Symbol.iterator]) === 'function' &&
-    (_ = _()) &&
-    typeof _.next === 'function'
-  ), 'be an iterable')
-}
+const isIterable = value => (
+  value &&
+  typeof (value = value[Symbol.iterator]) === 'function' &&
+  (value = value()) &&
+  typeof value.next === 'function'
+)
 
 const toArray = iterable => {
   const iterator = iterable[Symbol.iterator]()
@@ -32,19 +26,19 @@ const toArray = iterable => {
 
 // ===================================================================
 
-describe.only('fibonacci()', () => {
+describe('fibonacci()', () => {
   it('returns an iterable', () => {
-    expect(fibonacci()).to.be.an.iterable()
+    expect(isIterable(fibonacci())).toBe(true)
   })
 
   it('generates the Fibonacci sequence', () => {
     expect(toArray(fibonacci()::take(10)))
-      .to.eql([ 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 ])
+      .toEqual([ 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 ])
   })
 })
 
 describe('createBackoff()', () => {
   it('returns an iterable', () => {
-    expect(createBackoff()).to.be.an.iterable()
+    expect(isIterable(createBackoff())).toBe(true)
   })
 })
