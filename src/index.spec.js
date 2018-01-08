@@ -18,7 +18,7 @@ describe('Client', () => {
   beforeAll(() => new Promise(resolve => {
     server = new WebSocketServer({
       host: 'localhost',
-      port: 0
+      port: 0,
     }, function () {
       serverPort = this.address().port
 

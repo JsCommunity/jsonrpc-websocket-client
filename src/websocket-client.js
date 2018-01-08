@@ -110,7 +110,7 @@ export default class WebSocketClient extends EventEmitter {
         const { value } = current
         this.emit('scheduledAttempt', {
           cancel,
-          delay: value
+          delay: value,
         })
 
         error_ = error

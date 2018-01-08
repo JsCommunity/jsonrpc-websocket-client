@@ -8,7 +8,7 @@ import WebSocketClient, {
   CLOSED,
   CONNECTING,
   MESSAGE,
-  OPEN
+  OPEN,
 } from './websocket-client'
 
 // ===================================================================
@@ -21,7 +21,7 @@ export {
   AbortedConnection,
   CLOSED,
   CONNECTING,
-  OPEN
+  OPEN,
 }
 
 // -------------------------------------------------------------------

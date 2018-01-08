@@ -45,11 +45,15 @@
     "babel-preset-env": "^1.5.1",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.0.0",
-    "dependency-check": "^2.8.0",
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "husky": "^0.14.3",
     "jest": "^22.0.4",
-    "rimraf": "^2.6.1",
-    "standard": "^10.0.2"
+    "rimraf": "^2.6.1"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production babel --source-maps --out-dir=dist/ src/",
@@ -57,10 +61,10 @@
     "commitmsg": "yarn test",
     "dev": "cross-env NODE_ENV=development babel --watch --source-maps --out-dir=dist/ src/",
     "dev-test": "jest --bail --watch",
-    "posttest": "standard && dependency-check ./package.json",
     "prebuild": "yarn run clean",
     "predev": "yarn run clean",
     "prepublishOnly": "yarn run build",
+    "pretest": "eslint --ignore-path .gitignore --fix .",
     "test": "jest"
   },
   "babel": {
@@ -90,14 +94,5 @@
       "<rootDir>/src"
     ],
     "testRegex": "\\.spec\\.js$"
-  },
-  "standard": {
-    "ignore": [
-      "dist"
-    ],
-    "parser": "babel-eslint"
-  },
-  "browser": {
-    "ws": "./dist/ws-browser.js"
   }
 }

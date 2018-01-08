@@ -18,8 +18,8 @@ describe('parseUrl()', () => {
     beforeAll(() => {
       global.window = {
         location: {
-          toString: () => 'http://example.org/foo/bar'
-        }
+          toString: () => 'http://example.org/foo/bar',
+        },
       }
     })
 
