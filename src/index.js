@@ -1,4 +1,5 @@
 import Peer, { MethodNotFound } from 'json-rpc-peer'
+import { fibonacci } from 'iterable-backoff'
 import { isString } from 'lodash'
 
 import parseUrl from './parse-url'
@@ -13,7 +14,8 @@ import WebSocketClient, {
 
 // ===================================================================
 
-export createBackoff from './backoff'
+export const createBackoff = (tries = 10) =>
+  fibonacci().addNoise().toMs().take(tries)
 
 export {
   ConnectionError,
