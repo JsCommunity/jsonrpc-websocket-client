@@ -1,9 +1,9 @@
 import eventToPromise from 'event-to-promise'
+import startsWith from 'lodash/startsWith'
 import WebSocket from 'ws'
 import { attempt } from 'promise-toolbox'
 import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
-import { startsWith } from 'lodash'
 
 // ===================================================================
 
@@ -48,7 +48,7 @@ export default class WebSocketClient extends EventEmitter {
     this._socket = null
     this._status = CLOSED
 
-    this._onClose = ::this._onClose
+    this._onClose = this._onClose.bind(this)
   }
 
   get protocol () {

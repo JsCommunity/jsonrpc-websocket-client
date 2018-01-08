@@ -1,6 +1,5 @@
 import Peer, { MethodNotFound } from 'json-rpc-peer'
 import { fibonacci } from 'iterable-backoff'
-import { isString } from 'lodash'
 
 import parseUrl from './parse-url'
 import WebSocketClient, {
@@ -33,7 +32,7 @@ export default class JsonRpcWebSocketClient extends WebSocketClient {
       let url, protocols
       if (!opts) {
         opts = {}
-      } else if (isString(opts)) {
+      } else if (typeof opts === 'string') {
         url = opts
         opts = {}
       } else {
