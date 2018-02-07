@@ -94,5 +94,8 @@
       "<rootDir>/src"
     ],
     "testRegex": "\\.spec\\.js$"
+  },
+  "browser": {
+    "ws": "./dist/ws-browser.js"
   }
 }
