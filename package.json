@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "event-to-promise": "^0.8.0",
+    "isomorphic-ws": "^4.0.1",
     "iterable-backoff": "^0.0.0",
     "json-rpc-peer": "^0.15.0",
     "lodash": "^4.17.4",
@@ -94,8 +95,5 @@
       "<rootDir>/src"
     ],
     "testRegex": "\\.spec\\.js$"
-  },
-  "browser": {
-    "ws": "./dist/ws-browser.js"
   }
 }
