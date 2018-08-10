@@ -1,6 +1,6 @@
 import eventToPromise from 'event-to-promise'
 import startsWith from 'lodash/startsWith'
-import WebSocket from 'ws'
+import WebSocket from 'isomorphic-ws'
 import { attempt } from 'promise-toolbox'
 import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
