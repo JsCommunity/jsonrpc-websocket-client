@@ -1,7 +1,8 @@
-import eventToPromise from 'event-to-promise'
+import fromEvent from 'promise-toolbox/fromEvent'
+import fromEvents from 'promise-toolbox/fromEvents'
+import pTry from 'promise-toolbox/try'
 import startsWith from 'lodash/startsWith'
 import WebSocket from 'isomorphic-ws'
-import { attempt } from 'promise-toolbox'
 import { BaseError } from 'make-error'
 import { EventEmitter } from 'events'
 
@@ -60,7 +61,7 @@ export default class WebSocketClient extends EventEmitter {
   }
 
   close () {
-    return attempt(() => {
+    return pTry(() => {
       const status = this._status
       if (status === CLOSED) {
         return
@@ -73,7 +74,7 @@ export default class WebSocketClient extends EventEmitter {
         return
       }
 
-      const promise = eventToPromise(socket, 'close')
+      const promise = fromEvent(socket, 'close')
       socket.close()
       return promise
     })
@@ -154,7 +155,7 @@ export default class WebSocketClient extends EventEmitter {
   }
 
   _open () {
-    return attempt(() => {
+    return pTry(() => {
       this._assertStatus(CLOSED)
       this._status = CONNECTING
 
@@ -164,7 +165,7 @@ export default class WebSocketClient extends EventEmitter {
         this._opts
       )
 
-      return eventToPromise.multi(
+      return fromEvents(
         socket,
         [ 'open' ],
         [ 'close', 'error' ]

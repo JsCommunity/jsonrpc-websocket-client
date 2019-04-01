@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import eventToPromise from 'event-to-promise'
+import eventToPromise from 'promise-toolbox/fromEvent'
 import Peer, {JsonRpcError} from 'json-rpc-peer'
 import {Server as WebSocketServer} from 'ws'
 
