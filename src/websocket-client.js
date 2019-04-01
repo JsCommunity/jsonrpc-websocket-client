@@ -1,14 +1,14 @@
-import fromEvent from 'promise-toolbox/fromEvent'
-import fromEvents from 'promise-toolbox/fromEvents'
-import pTry from 'promise-toolbox/try'
-import startsWith from 'lodash/startsWith'
-import WebSocket from 'isomorphic-ws'
-import { BaseError } from 'make-error'
-import { EventEmitter } from 'events'
+import fromEvent from "promise-toolbox/fromEvent";
+import fromEvents from "promise-toolbox/fromEvents";
+import pTry from "promise-toolbox/try";
+import startsWith from "lodash/startsWith";
+import WebSocket from "isomorphic-ws";
+import { BaseError } from "make-error";
+import { EventEmitter } from "events";
 
 // ===================================================================
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // ===================================================================
 
@@ -17,183 +17,181 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 export class ConnectionError extends BaseError {}
 
 export class AbortedConnection extends ConnectionError {
-  constructor () {
-    super('connection aborted')
+  constructor() {
+    super("connection aborted");
   }
 }
 
 // -------------------------------------------------------------------
 
-export const CLOSED = 'closed'
-export const CONNECTING = 'connecting'
-export const MESSAGE = 'message'
-export const OPEN = 'open'
+export const CLOSED = "closed";
+export const CONNECTING = "connecting";
+export const MESSAGE = "message";
+export const OPEN = "open";
 
 // -------------------------------------------------------------------
 
 export default class WebSocketClient extends EventEmitter {
-  constructor (url, protocols, opts) {
-    super()
+  constructor(url, protocols, opts) {
+    super();
 
-    if (opts && !startsWith(this._url, 'wss')) {
+    if (opts && !startsWith(this._url, "wss")) {
       // `rejectUnauthorized` cannot be used if the connection is not
       // `secure!
-      delete opts.rejectUnauthorized
+      delete opts.rejectUnauthorized;
     }
 
-    this._opts = opts
-    this._protocols = protocols
-    this._url = url
+    this._opts = opts;
+    this._protocols = protocols;
+    this._url = url;
 
-    this._protocol = null
-    this._socket = null
-    this._status = CLOSED
+    this._protocol = null;
+    this._socket = null;
+    this._status = CLOSED;
 
-    this._onClose = this._onClose.bind(this)
+    this._onClose = this._onClose.bind(this);
   }
 
-  get protocol () {
-    return this._protocol
+  get protocol() {
+    return this._protocol;
   }
 
-  get status () {
-    return this._status
+  get status() {
+    return this._status;
   }
 
-  close () {
+  close() {
     return pTry(() => {
-      const status = this._status
+      const status = this._status;
       if (status === CLOSED) {
-        return
+        return;
       }
 
-      const socket = this._socket
+      const socket = this._socket;
       if (status === CONNECTING) {
-        socket.abort = true
-        socket.close()
-        return
+        socket.abort = true;
+        socket.close();
+        return;
       }
 
-      const promise = fromEvent(socket, 'close')
-      socket.close()
-      return promise
-    })
+      const promise = fromEvent(socket, "close");
+      socket.close();
+      return promise;
+    });
   }
 
-  open (backoff) {
+  open(backoff) {
     if (!backoff) {
-      return this._open()
+      return this._open();
     }
 
-    const iterator = backoff[Symbol.iterator]()
+    const iterator = backoff[Symbol.iterator]();
 
-    let cancelled = false
+    let cancelled = false;
     const cancel = () => {
-      cancelled = true
-    }
+      cancelled = true;
+    };
 
-    let error_
+    let error_;
     const attempt = () => {
       if (cancelled) {
-        throw error_
+        throw error_;
       }
 
       return this._open().catch(error => {
-        let current
+        let current;
 
         if (
           error instanceof AbortedConnection ||
           (current = iterator.next()).done
         ) {
-          throw error
+          throw error;
         }
 
-        const { value } = current
-        this.emit('scheduledAttempt', {
+        const { value } = current;
+        this.emit("scheduledAttempt", {
           cancel,
           delay: value,
-        })
+        });
 
-        error_ = error
-        return delay(current.value).then(attempt)
-      })
-    }
+        error_ = error;
+        return delay(current.value).then(attempt);
+      });
+    };
 
-    const promise = attempt()
-    promise.cancel = cancel
+    const promise = attempt();
+    promise.cancel = cancel;
 
-    return promise
+    return promise;
   }
 
-  send (data) {
-    this._assertStatus(OPEN)
+  send(data) {
+    this._assertStatus(OPEN);
 
-    this._socket.send(data)
+    this._socket.send(data);
   }
 
-  _assertNotStatus (notExpected) {
+  _assertNotStatus(notExpected) {
     if (this._status === notExpected) {
-      throw new ConnectionError(`invalid status ${this._status}`)
+      throw new ConnectionError(`invalid status ${this._status}`);
     }
   }
 
-  _assertStatus (expected) {
+  _assertStatus(expected) {
     if (this._status !== expected) {
-      throw new ConnectionError(`invalid status ${this._status}, expected ${expected}`)
+      throw new ConnectionError(
+        `invalid status ${this._status}, expected ${expected}`
+      );
     }
   }
 
-  _onClose () {
-    const previous = this._status
+  _onClose() {
+    const previous = this._status;
 
-    this._socket = null
-    this._status = CLOSED
+    this._socket = null;
+    this._status = CLOSED;
 
     if (previous === OPEN) {
-      this.emit(CLOSED)
+      this.emit(CLOSED);
     }
   }
 
-  _open () {
+  _open() {
     return pTry(() => {
-      this._assertStatus(CLOSED)
-      this._status = CONNECTING
+      this._assertStatus(CLOSED);
+      this._status = CONNECTING;
 
-      const socket = this._socket = new WebSocket(
+      const socket = (this._socket = new WebSocket(
         this._url,
         this._protocols,
         this._opts
-      )
+      ));
 
-      return fromEvents(
-        socket,
-        [ 'open' ],
-        [ 'close', 'error' ]
-      ).then(
+      return fromEvents(socket, ["open"], ["close", "error"]).then(
         () => {
-          socket.addEventListener('close', this._onClose)
+          socket.addEventListener("close", this._onClose);
 
-          socket.addEventListener('error', error => {
-            this.emit('error', error)
-          })
+          socket.addEventListener("error", error => {
+            this.emit("error", error);
+          });
 
-          socket.addEventListener('message', ({ data }) => {
-            this.emit(MESSAGE, data)
-          })
+          socket.addEventListener("message", ({ data }) => {
+            this.emit(MESSAGE, data);
+          });
 
-          this._status = OPEN
-          this.emit(OPEN)
+          this._status = OPEN;
+          this.emit(OPEN);
         },
         args => {
-          this._onClose()
+          this._onClose();
 
           if (socket.abort) {
-            throw new AbortedConnection()
+            throw new AbortedConnection();
           }
 
-          throw new ConnectionError(args[0].message)
+          throw new ConnectionError(args[0].message);
         }
-      )
-    })
+      );
+    });
   }
 }
