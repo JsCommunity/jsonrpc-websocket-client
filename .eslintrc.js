@@ -31,6 +31,6 @@ module.exports = {
   },
 
   settings: {
-    polyfills: ["promises", "symbol"],
+    polyfills: ["Promise", "Symbol"],
   },
 };

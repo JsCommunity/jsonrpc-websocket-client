@@ -182,14 +182,14 @@ export default class WebSocketClient extends EventEmitter {
           this._status = OPEN;
           this.emit(OPEN);
         },
-        args => {
+        ([error]) => {
           this._onClose();
 
           if (socket.abort) {
             throw new AbortedConnection();
           }
 
-          throw new ConnectionError(args[0].message);
+          throw error;
         }
       );
     });

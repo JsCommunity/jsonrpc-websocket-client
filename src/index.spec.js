@@ -99,7 +99,7 @@ describe("Client", () => {
     it("returns a promise which rejects on connection error", () => {
       client = new Client("ws://localhost:-1");
 
-      return expect(client.open()).rejects.toBeInstanceOf(ConnectionError);
+      return expect(client.open()).rejects.toThrow();
     });
   });
 
