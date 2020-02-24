@@ -89,6 +89,10 @@
       "git add",
       "eslint --ignore-pattern '!*'",
       "jest --findRelatedTests --passWithNoTests"
+    ],
+    "*.md": [
+      "prettier --write",
+      "git add"
     ]
   }
 }

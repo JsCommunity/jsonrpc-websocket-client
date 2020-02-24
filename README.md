@@ -17,51 +17,49 @@ enable them.
 ## Usage
 
 ```javascript
-import Client from 'jsonrpc-websocket-client'
+import Client from "jsonrpc-websocket-client";
 
-async function main () {
-  const client = new Client('ws://example.org')
+async function main() {
+  const client = new Client("ws://example.org");
 
-  console.log(client.status)
+  console.log(client.status);
   // → closed
 
-  await client.open()
+  await client.open();
 
-  console.log(client.status)
+  console.log(client.status);
   // → open
 
-  console.log(
-    await client.call('method', [1, 2, 3])
-  )
+  console.log(await client.call("method", [1, 2, 3]));
 
-  await client.close()
+  await client.close();
 }
 
 // Run the main function and prints any errors.
 main().catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+  console.error(error);
+  process.exit(1);
+});
 ```
 
 ### Creation
 
 ```js
-const client = new Client(opts)
+const client = new Client(opts);
 ```
 
 `opts` is either a string (the URL of the server) or an object with
 the following properties:
 
 - `url`: URL of the JSON-RPC server
-- `protocols` (*optional*): the WebSocket sub-protocols to use
+- `protocols` (_optional_): the WebSocket sub-protocols to use
 
 ### Connection management
 
 **Status**
 
 ```js
-console.log(client.status)
+console.log(client.status);
 ```
 
 Possible values:
@@ -73,13 +71,13 @@ Possible values:
 **Connection**
 
 ```js
-await client.open()
+await client.open();
 ```
 
 **Disconnection**
 
 ```js
-await client.close()
+await client.close();
 ```
 
 This method can also be used to abort the connection while connecting.
@@ -89,25 +87,25 @@ This method can also be used to abort the connection while connecting.
 **Connection**
 
 ```js
-client.on('open', () => {
-  console.log('client is now open')
-})
+client.on("open", () => {
+  console.log("client is now open");
+});
 ```
 
 **Disconnection**
 
 ```js
-client.on('closed', () => {
-  console.log('client is now closed')
-})
+client.on("closed", () => {
+  console.log("client is now closed");
+});
 ```
 
 **Notification**
 
 ```js
-client.on('notification', notification => {
-  console.log('notification received', notification)
-})
+client.on("notification", notification => {
+  console.log("notification received", notification);
+});
 ```
 
 ## Recipes
@@ -117,17 +115,17 @@ client.on('notification', notification => {
 > Reconnect on disconnection:
 
 ```js
-client.on('closed', () => {
-  client.open()
-})
+client.on("closed", () => {
+  client.open();
+});
 ```
 
 > Use back off to keep retrying to connect:
 
 ```js
-import { createBackoff } from 'jsonrpc-websocket-client'
+import { createBackoff } from "jsonrpc-websocket-client";
 
-client.open(createBackoff())
+client.open(createBackoff());
 ```
 
 ## Development
@@ -151,7 +149,7 @@ client.open(createBackoff())
 
 ## Contributions
 
-Contributions are *very* welcomed, either on the documentation or on
+Contributions are _very_ welcomed, either on the documentation or on
 the code.
 
 You may:
