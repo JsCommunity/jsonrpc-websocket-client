@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-deprecated-api
 import { resolve as resolveUrl } from "url";
 
 // ===================================================================

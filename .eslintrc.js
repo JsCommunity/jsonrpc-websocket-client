@@ -13,6 +13,10 @@ module.exports = {
     "prettier/standard",
   ],
 
+  parserOptions: {
+    sourceType: "module",
+  },
+
   rules: {
     // prefer let/const over var
     "no-var": "error",
