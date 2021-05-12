@@ -23,7 +23,7 @@ export { ConnectionError, AbortedConnection, CLOSED, CONNECTING, OPEN };
 
 // -------------------------------------------------------------------
 
-export default class JsonRpcWebSocketClient extends WebSocketClient {
+export class JsonRpcWebSocketClient extends WebSocketClient {
   constructor(opts) {
     {
       let url, protocols;

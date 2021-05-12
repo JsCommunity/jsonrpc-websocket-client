@@ -4,7 +4,11 @@ import eventToPromise from "promise-toolbox/fromEvent";
 import Peer, { JsonRpcError } from "json-rpc-peer";
 import { Server as WebSocketServer } from "ws";
 
-import Client, { AbortedConnection, ConnectionError } from "./index";
+import {
+  AbortedConnection,
+  ConnectionError,
+  JsonRpcWebSocketClient as Client,
+} from "./index";
 
 // ===================================================================
 
