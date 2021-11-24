@@ -12,10 +12,6 @@ Installation of the [npm package](https://npmjs.org/package/jsonrpc-websocket-cl
 > npm install --save jsonrpc-websocket-client
 ```
 
-This library requires promises support, for Node versions prior to 0.12 [see
-this page](https://github.com/JsCommunity/promise-toolbox#usage) to
-enable them.
-
 ## Usage
 
 ```javascript
