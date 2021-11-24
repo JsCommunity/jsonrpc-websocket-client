@@ -1,7 +1,6 @@
 import fromEvent from "promise-toolbox/fromEvent";
 import fromEvents from "promise-toolbox/fromEvents";
 import pTry from "promise-toolbox/try";
-import startsWith from "lodash/startsWith";
 import WebSocket from "isomorphic-ws";
 import { BaseError } from "make-error";
 import { EventEmitter } from "events";
@@ -35,7 +34,7 @@ export default class WebSocketClient extends EventEmitter {
   constructor(url, protocols, opts) {
     super();
 
-    if (opts && !startsWith(url, "wss")) {
+    if (opts && !url.startsWith("wss")) {
       // `rejectUnauthorized` cannot be used if the connection is not
       // `secure!
       delete opts.rejectUnauthorized;
