@@ -35,7 +35,7 @@ export default class WebSocketClient extends EventEmitter {
   constructor(url, protocols, opts) {
     super();
 
-    if (opts && !startsWith(this._url, "wss")) {
+    if (opts && !startsWith(url, "wss")) {
       // `rejectUnauthorized` cannot be used if the connection is not
       // `secure!
       delete opts.rejectUnauthorized;
