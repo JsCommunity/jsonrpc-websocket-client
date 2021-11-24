@@ -1,4 +1,6 @@
-# jsonrpc-websocket-client [![Build Status](https://travis-ci.org/jsonrpc-websocket-client.png?branch=master)](https://travis-ci.org/jsonrpc-websocket-client)
+# jsonrpc-websocket-client
+
+[![Package Version](https://badgen.net/npm/v/jsonrpc-websocket-client)](https://npmjs.org/package/jsonrpc-websocket-client) [![Build Status](https://travis-ci.org/JsCommunity/jsonrpc-websocket-client.png?branch=master)](https://travis-ci.org/JsCommunity/jsonrpc-websocket-client) [![PackagePhobia](https://badgen.net/packagephobia/install/jsonrpc-websocket-client)](https://packagephobia.now.sh/result?p=jsonrpc-websocket-client) [![Latest Commit](https://badgen.net/github/last-commit/JsCommunity/jsonrpc-websocket-client)](https://github.com/JsCommunity/jsonrpc-websocket-client/commits/master)
 
 > JSON-RPC 2 over WebSocket
 
