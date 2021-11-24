@@ -6,7 +6,7 @@ import parseUrl from "./parse-url";
 
 describe("parseUrl()", () => {
   it("protocol is added if missing", () => {
-    expect(parseUrl("example.org")).toBe("ws://example.org");
+    expect(parseUrl("example.org")).toBe("wss://example.org");
   });
 
   it("HTTP(s) is converted to WS(s)", () => {
