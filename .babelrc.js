@@ -49,7 +49,7 @@ const plugins = {};
 const presets = {};
 
 const pkg = require("./package.json");
-Object.keys(pkg.devDependencies || {}).forEach(name => {
+Object.keys(pkg.devDependencies || {}).forEach((name) => {
   if (!(name in presets) && PLUGINS_RE.test(name)) {
     plugins[name] = getConfig(name, pkg);
   } else if (!(name in presets) && PRESETS_RE.test(name)) {
@@ -60,6 +60,6 @@ Object.keys(pkg.devDependencies || {}).forEach(name => {
 module.exports = {
   comments: !__PROD__,
   ignore: __TEST__ ? undefined : [/\.spec\.js$/],
-  plugins: Object.keys(plugins).map(plugin => [plugin, plugins[plugin]]),
-  presets: Object.keys(presets).map(preset => [preset, presets[preset]]),
+  plugins: Object.keys(plugins).map((plugin) => [plugin, plugins[plugin]]),
+  presets: Object.keys(presets).map((preset) => [preset, presets[preset]]),
 };

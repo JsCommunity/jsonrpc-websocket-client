@@ -14,10 +14,7 @@ import WebSocketClient, {
 // ===================================================================
 
 export const createBackoff = (tries = 10) =>
-  fibonacci()
-    .addNoise()
-    .toMs()
-    .take(tries);
+  fibonacci().addNoise().toMs().take(tries);
 
 export { ConnectionError, AbortedConnection, CLOSED, CONNECTING, OPEN };
 
@@ -39,14 +36,14 @@ export class JsonRpcWebSocketClient extends WebSocketClient {
       super(parseUrl(url), protocols, opts);
     }
 
-    const peer = (this._peer = new Peer(message => {
+    const peer = (this._peer = new Peer((message) => {
       // This peer is only a client and does not support requests.
       if (message.type !== "notification") {
         throw new MethodNotFound();
       }
 
       this.emit("notification", message);
-    }).on("data", message => {
+    }).on("data", (message) => {
       this.send(message);
     }));
 
@@ -56,7 +53,7 @@ export class JsonRpcWebSocketClient extends WebSocketClient {
       );
     });
 
-    this.on(MESSAGE, message => {
+    this.on(MESSAGE, (message) => {
       peer.write(message);
     });
   }

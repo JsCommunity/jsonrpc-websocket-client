@@ -8,7 +8,7 @@ import { EventEmitter } from "events";
 
 // ===================================================================
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ===================================================================
 
@@ -98,7 +98,7 @@ export default class WebSocketClient extends EventEmitter {
         throw error_;
       }
 
-      return this._open().catch(error => {
+      return this._open().catch((error) => {
         let current;
 
         if (
@@ -171,7 +171,7 @@ export default class WebSocketClient extends EventEmitter {
         () => {
           socket.addEventListener("close", this._onClose);
 
-          socket.addEventListener("error", error => {
+          socket.addEventListener("error", (error) => {
             this.emit("error", error);
           });
 

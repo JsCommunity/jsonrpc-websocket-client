@@ -21,19 +21,19 @@ describe("Client", () => {
   let serverPort;
   beforeAll(
     () =>
-      new Promise(resolve => {
+      new Promise((resolve) => {
         server = new WebSocketServer(
           {
             host: "localhost",
             port: 0,
           },
-          function() {
+          function () {
             serverPort = this.address().port;
 
             resolve();
           }
-        ).on("connection", socket => {
-          const jsonRpc = new Peer(message => {
+        ).on("connection", (socket) => {
+          const jsonRpc = new Peer((message) => {
             if (message.type === "notification") {
               return;
             }
@@ -47,12 +47,12 @@ describe("Client", () => {
             }
           });
 
-          jsonRpc.on("data", data => {
+          jsonRpc.on("data", (data) => {
             if (socket.readyState === socket.OPEN) {
               socket.send(data);
             }
           });
-          socket.on("message", message => {
+          socket.on("message", (message) => {
             jsonRpc.write(message);
           });
         });
@@ -142,7 +142,7 @@ describe("Client", () => {
       return client
         .open()
         .then(() => client.call("identity", [42]))
-        .then(result => {
+        .then((result) => {
           expect(result).toBe(42);
         });
     });
@@ -155,7 +155,7 @@ describe("Client", () => {
           () => {
             throw new Error("must have rejected");
           },
-          error => {
+          (error) => {
             expect(error.message).toBe("an error");
           }
         );

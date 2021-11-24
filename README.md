@@ -36,7 +36,7 @@ async function main() {
 }
 
 // Run the main function and prints any errors.
-main().catch(error => {
+main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
@@ -103,7 +103,7 @@ client.on("closed", () => {
 **Notification**
 
 ```js
-client.on("notification", notification => {
+client.on("notification", (notification) => {
   console.log("notification received", notification);
 });
 ```
