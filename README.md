@@ -53,6 +53,7 @@ the following properties:
 
 - `url`: URL of the JSON-RPC server
 - `protocols` (_optional_): the WebSocket sub-protocols to use
+- `rejectUnauthorized` (defaults to `true`): whether to reject invalid HTTPS certificate (e.g. self signed)
 
 ### Connection management
 
