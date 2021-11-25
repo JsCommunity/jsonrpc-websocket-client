@@ -30,7 +30,7 @@ export class JsonRpcWebSocketClient extends WebSocketClient {
         url = opts;
         opts = {};
       } else {
-        ({ url, protocols = "", ...opts } = opts);
+        ({ url, protocols = [], ...opts } = opts);
       }
 
       super(parseUrl(url), protocols, opts);
