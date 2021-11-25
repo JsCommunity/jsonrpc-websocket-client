@@ -160,37 +160,41 @@ export default class WebSocketClient extends EventEmitter {
       this._assertStatus(CLOSED);
       this._status = CONNECTING;
 
-      const socket = (this._socket = new WebSocket(
-        this._url,
-        this._protocols,
-        this._opts
-      ));
+      return pTry(() => {
+        const socket = (this._socket = new WebSocket(
+          this._url,
+          this._protocols,
+          this._opts
+        ));
 
-      return fromEvents(socket, ["open"], ["close", "error"]).then(
-        () => {
-          socket.addEventListener("close", this._onClose);
+        return fromEvents(socket, ["open"], ["close", "error"]).then(
+          () => {
+            socket.addEventListener("close", this._onClose);
 
-          socket.addEventListener("error", (error) => {
-            this.emit("error", error);
-          });
+            socket.addEventListener("error", (error) => {
+              this.emit("error", error);
+            });
 
-          socket.addEventListener("message", ({ data }) => {
-            this.emit(MESSAGE, data);
-          });
+            socket.addEventListener("message", ({ data }) => {
+              this.emit(MESSAGE, data);
+            });
 
-          this._status = OPEN;
-          this.emit(OPEN);
-        },
-        ([error]) => {
-          this._onClose();
+            this._status = OPEN;
+            this.emit(OPEN);
+          },
+          ([error]) => {
+            if (socket.abort) {
+              throw new AbortedConnection();
+            }
 
-          if (socket.abort) {
-            throw new AbortedConnection();
+            throw error;
           }
+        );
+      }).catch((error) => {
+        this._onClose();
 
-          throw error;
-        }
-      );
+        throw error;
+      });
     });
   }
 }
